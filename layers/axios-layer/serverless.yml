@@ -1,0 +1,16 @@
+service: axios-layer 
+
+frameworkVersion: ">=1.10.0"
+
+provider:
+  name: aws
+  region: eu-central-1
+  stage: prod
+
+layers:
+  AxiosLayer:
+    path: axios
+    compatibleRuntimes:
+      - nodejs12.x
+      - nodejs10.x
+    description: "Axios dependencies"

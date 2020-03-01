@@ -1,0 +1,43 @@
+
+service: aws-ts-node
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: eu-central-1
+  environment:
+    NODE_PATH: "./:/opt/node_modules"
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+  - serverless-iam-roles-per-function
+  - serverless-dotenv-plugin
+  - serverless-pseudo-parameters
+  - serverless-aws-documentation
+
+package:
+  exclude:
+    - node_modules/**
+    - layers/**
+
+functions:
+  hello:
+    handler: src/lambdas/handler.handler
+    memorySize: 256
+    timeout: 30
+    events:
+      - http: 
+          path: hello
+          method: post
+          request:
+            schema:
+              application/json: ${file(src/schemas/handlerSchema.json)}
+    iamRoleStatements:
+    - Effect: Allow        
+      Action: "*"  
+      Resource: "*"
+    layers:
+      - ${env:AWS_SDK_LAYER_ARN}
+      - ${env:AXIOS_LAYER_ARN}
