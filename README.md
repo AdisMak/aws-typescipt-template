@@ -1,0 +1,1 @@
+# aws-typescipt-template
